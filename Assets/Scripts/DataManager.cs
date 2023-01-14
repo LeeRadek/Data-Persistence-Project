@@ -2,23 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.IO;
+
 
 public class DataManager : MonoBehaviour
 {
    public static DataManager instance;
 
     public static string playerName;
-    public static int playerScore;
+    public static int bestPlayerScore;
 
-    TMP_InputField inputField;
-    GameObject field;
+    public static string bestScoreText;
+
+    public static Dictionary<int, string> ScoreBoardMap = new Dictionary<int, string>(10);
+    
+    
+    
     
     private void Awake()
     {
-        field = GameObject.Find("Input Name Field ");
-        inputField = field.GetComponent<TMP_InputField>();
+        
 
-        if(instance != null)
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
@@ -26,10 +31,18 @@ public class DataManager : MonoBehaviour
        instance = this;
         DontDestroyOnLoad(gameObject);
 
+        
     }
 
-    public void SetPlayerName()
+
+
+    [System.Serializable]
+    public class SaveData
     {
-        playerName = inputField.text;
+        // here only variable wicht i want to save
+        
+        
     }
+
+    
 }
