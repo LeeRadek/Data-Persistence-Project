@@ -21,7 +21,7 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+    int loops = 0;
 
     private void Awake()
     {
@@ -85,9 +85,87 @@ public class MainManager : MonoBehaviour
         {
             DataManager.bestPlayerScore = m_Points;
             BestScore.text = "Best Score: " + DataManager.playerName + " " + DataManager.bestPlayerScore;
+            BestScore = null;
+
+            CheckBoard();
+            //SetBoard();
+            
+            
         }
+        
+        
+
+
     }
 
+    void CheckBoard()
+    {
+        bool isEqual = false;
+        bool isGreater = false;
+        loops = 0;
+        
+        
+
+        for (int i = 0; i < DataManager.m_ScoreBoard.Length - 1; i++)
+        {
+            if(DataManager.m_ScoreBoard[i].score == m_Points)
+            {
+                isEqual = true;
+            }
+
+            if(DataManager.m_ScoreBoard[i].score < m_Points)
+            {
+                isGreater = true;
+
+
+                loops += 1;
+                
+                break;
+            }
+            
+        }
+
+        for(int i = 0; i < loops; i++)
+        {
+
+            print("loops" + i);
+            if (isEqual)
+            {
+                
+                print("is equlas");
+            }
+
+            if (isGreater)
+            {
+
+                if(DataManager.m_ScoreBoard[i].score < m_Points)
+                {
+                    DataManager.m_ScoreBoard[loops].score = m_Points;
+                    DataManager.m_ScoreBoard[loops].Name = DataManager.playerName; //replace old score to new score
+
+                    m_Points = 0;
+                }
+                
+
+                DataManager.m_ScoreBoard[i + 1].score = DataManager.last_ScoreBoard[i].score; //move scores down
+                DataManager.m_ScoreBoard[i + 1].Name = DataManager.last_ScoreBoard[i].Name;
+
+                
+            }
+            
+            
+        }
+
+        
+
+        DataManager.last_ScoreBoard = DataManager.m_ScoreBoard; //save array
+
+    }
+
+    void SetBoard()
+    {
+        
+    }
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);

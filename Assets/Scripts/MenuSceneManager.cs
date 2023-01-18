@@ -31,13 +31,14 @@ public class MenuSceneManager : MonoBehaviour
     void ScoreText()
     {
         bestScoreText = GameObject.Find("Best Score Text").GetComponent<TMP_Text>();
-        if (bestScoreText.text == "No Score")
+        if (DataManager.last_ScoreBoard[0].score == 0)
         {
             bestScoreText.text = "No Best Score Yet";
         }
-        else if(bestScoreText.text != "No Score")
+        else if(DataManager.last_ScoreBoard[0].score > 0)
         {
-            bestScoreText.text = DataManager.playerName; //change when add filtering best player code
+            bestScoreText.text = "Best Score: " + DataManager.last_ScoreBoard[0].Name + " " + 
+                DataManager.last_ScoreBoard[0].score; 
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.IO;
+using scoreboard;
 
 
 public class DataManager : MonoBehaviour
@@ -13,9 +14,11 @@ public class DataManager : MonoBehaviour
     public static int bestPlayerScore;
 
     public static string bestScoreText;
-
-    public static Dictionary<int, string> ScoreBoardMap = new Dictionary<int, string>(10);
     
+    
+    
+    public static ScoreBoard[] m_ScoreBoard = new ScoreBoard[10]; 
+    public static ScoreBoard[] last_ScoreBoard = new ScoreBoard[10];//for saveing array
     
     
     

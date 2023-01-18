@@ -5,12 +5,18 @@ using TMPro;
 
 public class ScoreBoardManager : MonoBehaviour
 {
-    public List<TMP_Text> texts = new List<TMP_Text>();
-    GameObject g;
+    public TMP_Text[] scoreText = new TMP_Text[10];
+    public GameObject canvas;
+
     void Awake()
     {
-        g = GameObject.Find("Score 1");
-        texts.Add(g.GetComponent<TMP_Text>());
+        canvas = GameObject.Find("Canvas");
+        for(int i = 0; i < scoreText.Length; i++)
+        {
+            scoreText[i].text = DataManager.last_ScoreBoard[i].Name + " " + DataManager.last_ScoreBoard[i].score;
+        }
+
+        
     }
 
     // Update is called once per frame
