@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,17 +13,45 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public Text BestScore;
     public GameObject GameOverText;
-    
+
+    public MeshRenderer paddle;
+    public MeshRenderer ball;
+    public Material defoultMat;
+
     private bool m_Started = false;
     private int m_Points;
-    
+
     private bool m_GameOver = false;
 
-    int loops = 0;
+    int index = 0;
+    DataManager dataManager;
 
     private void Awake()
     {
         BestScore.text = "Best Score: " + DataManager.playerName + " " + DataManager.bestPlayerScore;
+
+        dataManager = FindObjectOfType<DataManager>();
+        
+
+        if (DataManager.paddleMat == null)
+        {
+            paddle.material = defoultMat;
+        }
+        else
+        {
+            paddle.material = DataManager.paddleMat;
+        }
+
+        if (DataManager.ballMat == null)
+        {
+            ball.material = defoultMat;
+        }
+        else
+        {
+            ball.material = DataManager.ballMat;
+        }
+        
+        
     }
 
     // Start is called before the first frame update
@@ -33,8 +59,8 @@ public class MainManager : MonoBehaviour
     {
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
-        
-        int[] pointCountArray = new [] {1,1,2,2,5,5};
+
+        int[] pointCountArray = new[] { 1, 1, 2, 2, 5, 5 };
         for (int i = 0; i < LineCount; ++i)
         {
             for (int x = 0; x < perLine; ++x)
@@ -81,94 +107,91 @@ public class MainManager : MonoBehaviour
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
-        if(m_Points > DataManager.bestPlayerScore)
+        if (m_Points > DataManager.bestPlayerScore)
         {
             DataManager.bestPlayerScore = m_Points;
             BestScore.text = "Best Score: " + DataManager.playerName + " " + DataManager.bestPlayerScore;
             BestScore = null;
 
-            CheckBoard();
-            //SetBoard();
-            
-            
+            CheckScoreBoard();
+
+            dataManager.SaveScore();
+
         }
-        
-        
+
+
 
 
     }
 
-    void CheckBoard()
+    void CheckScoreBoard()
     {
         bool isEqual = false;
         bool isGreater = false;
-        loops = 0;
-        
-        
+        index = 0;
+
+
 
         for (int i = 0; i < DataManager.m_ScoreBoard.Length - 1; i++)
         {
-            if(DataManager.m_ScoreBoard[i].score == m_Points)
+            if (DataManager.m_ScoreBoard[i].score == m_Points)
             {
                 isEqual = true;
+                print(isEqual);
             }
 
-            if(DataManager.m_ScoreBoard[i].score < m_Points)
+            if (DataManager.m_ScoreBoard[i].score < m_Points)
             {
                 isGreater = true;
 
 
-                loops += 1;
-                
+                index = i;
+
                 break;
             }
-            
+
         }
 
-        for(int i = 0; i < loops; i++)
+
+
+        if (isGreater)
         {
-
-            print("loops" + i);
-            if (isEqual)
+            for (int i = 0; i < DataManager.m_ScoreBoard.Length - 1 - index; i++)
             {
-                
-                print("is equlas");
+                int firstElement = DataManager.m_ScoreBoard.Length - 1 - i;
+                int secondElement = DataManager.m_ScoreBoard.Length - 2 - i;
+
+                DataManager.m_ScoreBoard[firstElement] = DataManager.last_ScoreBoard[secondElement];
+                //print(i + " i");
             }
 
-            if (isGreater)
-            {
-
-                if(DataManager.m_ScoreBoard[i].score < m_Points)
-                {
-                    DataManager.m_ScoreBoard[loops].score = m_Points;
-                    DataManager.m_ScoreBoard[loops].Name = DataManager.playerName; //replace old score to new score
-
-                    m_Points = 0;
-                }
-                
-
-                DataManager.m_ScoreBoard[i + 1].score = DataManager.last_ScoreBoard[i].score; //move scores down
-                DataManager.m_ScoreBoard[i + 1].Name = DataManager.last_ScoreBoard[i].Name;
-
-                
-            }
-            
-            
+            DataManager.m_ScoreBoard[index].score = m_Points;
+            DataManager.m_ScoreBoard[index].Name = DataManager.playerName;
         }
 
-        
+        if (isEqual)
+        {
+            for (int i = 0; i < DataManager.m_ScoreBoard.Length - 1 - index; i++)
+            {
+                int firstElement = DataManager.m_ScoreBoard.Length - 1 - i;
+                int secondElement = DataManager.m_ScoreBoard.Length - 2 - i;
 
-        DataManager.last_ScoreBoard = DataManager.m_ScoreBoard; //save array
+                DataManager.m_ScoreBoard[firstElement] = DataManager.last_ScoreBoard[secondElement];
+
+            }
+            DataManager.m_ScoreBoard[index].score = m_Points;
+            DataManager.m_ScoreBoard[index].Name = DataManager.playerName;
+
+            print(DataManager.m_ScoreBoard[0].Name);
+        }
+
+        DataManager.last_ScoreBoard = DataManager.m_ScoreBoard;
 
     }
 
-    void SetBoard()
-    {
-        
-    }
     public void BackToMenu()
     {
         SceneManager.LoadScene(0);
-        
+
     }
 }

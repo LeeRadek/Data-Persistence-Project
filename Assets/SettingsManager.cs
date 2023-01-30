@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ScoreBoardSceneManager : MonoBehaviour
+public class SettingsManager : MonoBehaviour
 {
     public void LoadMenu()
     {

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class ScoreBoardManager : MonoBehaviour
 {
@@ -11,17 +9,17 @@ public class ScoreBoardManager : MonoBehaviour
     void Awake()
     {
         canvas = GameObject.Find("Canvas");
-        for(int i = 0; i < scoreText.Length; i++)
+        for (int i = 0; i < scoreText.Length; i++)
         {
             scoreText[i].text = DataManager.last_ScoreBoard[i].Name + " " + DataManager.last_ScoreBoard[i].score;
         }
 
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
